@@ -1,8 +1,8 @@
-#YouTube Downloader Extension
+# YouTube Downloader Extension
 
 This is a simple chrome extension that adds a download button to every youtube video where we can download the video with different available qualities.
 
-##How to install
+## How to install
 
 1.Clone this repository
 ``` git
