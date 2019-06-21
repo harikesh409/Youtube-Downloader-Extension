@@ -1,0 +1,31 @@
+{
+	"manifest_version": 2,
+	"name": "Youtube Downloader",
+	"description": "Download youtube videos with a single click.",
+	"version": "0.1",
+	"author": "Harikesh Pallantla",
+	"web_accessible_resources": [
+		"src/youtube.js"
+	],
+	"content_scripts": [
+		{
+			"matches": [
+				"https://www.youtube.com/watch*"
+			],
+			"js": [
+				"src/loader.js"
+			],
+			"css": [
+				"src/style.css"
+			]
+		}
+	],
+	"permissions": [
+		"downloads"
+	],
+	"background": {
+		"scripts": [
+			"src/background.js"
+		]
+	}
+}
