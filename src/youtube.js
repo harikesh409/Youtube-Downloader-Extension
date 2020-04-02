@@ -1,28 +1,32 @@
-const downloadVideo = () => {
-	// console.log("Download this video");
-	let dropdown = document.querySelector("#videoDownloadDropdown");
-	if (dropdown.className.indexOf("show") > -1) {
-		dropdown.className = dropdown.className.replace("show", "");
-	} else {
-		dropdown.classList += " show";
-	}
+const downloadVideo = (event) => {
+	toggleListdisplay();
+}
+
+const toggleListdisplay = () => {
+	let btn = document.querySelectorAll("#downloadVideo")[0];
+    let dropdown = document.querySelector("#videoDownloadDropdown");
+    if (dropdown.classList.contains("show")) {
+        dropdown.classList.remove("show"); // = dropdown.className.replace("show", "");
+    } else {
+        //dropdown.classList += " show";
+        dropdown.classList.add("show");
+        dropdown.setAttribute("style", `left:${btn.offsetLeft}px`);
+    }
 }
 
 const downloadURI = e => {
+	//console.log('downloadURI');
 	e.preventDefault();
-	let dropdown = document.querySelector("#videoDownloadDropdown");
-	if (dropdown.className.indexOf("show") > -1) {
-		dropdown.className = dropdown.className.replace("show", "");
-	} else {
-		dropdown.classList += " show";
-	}
+	toggleListdisplay();
 	let url = e.currentTarget.getAttribute("href");
 	let name = document.getElementsByTagName("title")[0].innerText;
 	let type = e.currentTarget.getAttribute("data-type");
+	let ext = e.currentTarget.getAttribute("data-ext");
 	let data = {
 		url,
 		name,
 		type,
+		ext,
 		sender: "YTDL"
 	};
 	window.postMessage(data, "*");
@@ -30,20 +34,14 @@ const downloadURI = e => {
 
 window.onload = () => {
 	// console.log("Loaded");
-	let videoURLs = window.ytplayer.config.args.url_encoded_fmt_stream_map.split(",").map(item => {
-		return item.split("&").reduce((pre, cur) => {
-			// console.log("Prev: ", pre, "Curr: ", cur);
-			cur = cur.split("=");
-			return Object.assign(pre, {
-				[cur[0]]: decodeURIComponent(cur[1])
-			});
-		}, {});
-	});
+	let videoURLs = JSON.parse(window.ytplayer.config.args.player_response)
+        .streamingData.formats;
 	// console.log(videoURLs);
 	setTimeout(() => {
-		let container = document.querySelectorAll("#info")[2];
+		let container = document.querySelectorAll(
+            "#info h1.ytd-video-primary-info-renderer"
+		)[0];
 		let btn = document.createElement("button");
-		// btn.className = "style-scope ytd-button-renderer style-default size-default";
 		btn.id = "downloadVideo";
 		btn.setAttribute("role", "button");
 		btn.innerText = "Download";
@@ -60,15 +58,23 @@ window.onload = () => {
 
 		for (i in videoURLs) {
 			let item = document.createElement("a");
-			let ext = videoURLs[i]["type"].split("/")[1].split(";")[0];
-			item.innerText = `${videoURLs[i]["quality"]} (${ext})`;
+			let ext = videoURLs[i]["mimeType"].split("/")[1].split(";")[0];
+			item.innerText = `${videoURLs[i]["qualityLabel"]} (${ext})`;
 			item.href = videoURLs[i]["url"];
 			item.setAttribute("target", "_blank");
-			item.setAttribute("data-type", videoURLs[i]["type"]);
+			item.setAttribute("data-type", videoURLs[i]["mimeType"]);
+			item.setAttribute("data-ext", ext);
 			item.addEventListener("click", downloadURI);
 			dropList.append(item);
 		}
 
 		btn.addEventListener("click", downloadVideo);
+		/*
+		btn.addEventListener("blur", function(event){
+			console.log('blur');
+			if(event.target.id != dropdown.id)
+				dropdown.classList.remove("show");
+		});
+		*/
 	}, 5000)
 }
