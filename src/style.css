@@ -5,7 +5,7 @@
   transition: 0.2s ease-out;
   color: #fff;
   background: #db0000;
-  margin: 6px;
+  margin: 0 1rem;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   border-color: #b32924;
   cursor: pointer;
@@ -31,9 +31,9 @@
   background: #fff;
   z-index: 9999;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-  right: 0;
-  margin-right: calc(100% - 900px);
-  margin-top: 63px;
+  /*right: 0;
+  margin-right: calc(100% - 900px);*/
+  margin-top: 1rem;
   display: none;
 }
 
