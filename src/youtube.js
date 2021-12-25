@@ -34,8 +34,7 @@ const downloadURI = e => {
 
 window.onload = () => {
 	// console.log("Loaded");
-	let videoURLs = JSON.parse(window.ytplayer.config.args.player_response)
-        .streamingData.formats;
+	let videoURLs = window.ytplayer.config.args.raw_player_response.streamingData.formats;
 	// console.log(videoURLs);
 	setTimeout(() => {
 		let container = document.querySelectorAll(
